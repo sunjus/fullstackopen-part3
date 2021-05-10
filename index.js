@@ -56,21 +56,18 @@ app.delete("/api/persons/:id", (request, response) => {
 });
 
 app.post("/api/persons", (request, response) => {
-  const generateId = () => {
-    return Math.floor(Math.random() * 10000);
-  };
-
   const body = request.body;
-  console.log(body);
 
   if (!body.name || !body.number) {
-    return response.status(400).json({ error: " Empty space is not allowed" });
+    return response.status(400).json({ error: " Name or Number is missing" });
+  } else if (persons.map((person) => person.name).includes(body.name)) {
+    return response.status(400).json({ error: "Name must be unique" });
   }
 
   const person = {
     name: body.name,
     number: body.number,
-    id: generateId,
+    id: Math.floor(Math.random() * 10000),
   };
 
   persons = persons.concat(person);
